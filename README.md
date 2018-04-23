@@ -34,6 +34,10 @@ vi newstyle_B2GWW_doFit_class.py
 
 % For muon and electron channel, only W masswindow
 
+mkdir cards_B2GWW_closuretest0_ExpN cards_B2GWW
+
+ln -s cards_B2GWW_closuretest0_ExpN cards_B2GWW
+
 . fit.sh
 
 . combin.sh
