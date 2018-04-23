@@ -175,7 +175,7 @@ class DoFit:
             self.mj_sideband_lo_max = 55
             self.mj_signal_min = 55
             self.mj_signal_max = 65
-            self.mj_sideband_hi_min = 95#
+            self.mj_sideband_hi_min = 135
             self.mj_sideband_hi_max = in_mj_max
         if options.closuretest == 2: #closure test A->B
             self.mj_sideband_lo_min = in_mj_min
@@ -250,29 +250,29 @@ class DoFit:
             raw_input("Fail to find correct categoryID. Please check your wtaggerI:%s and channel:%s"%(self.wtagger_category, self.channel))
         if self.wtagger_category == "HP":
            if options.width == 1: #high mass signal >1.0TeV
-               self.tau21_cut_max = 1
-               self.tau21_cut_min =0.98
+               self.tau21_cut_max = 0.55
+               self.tau21_cut_min =0.
            else:#for 600GeV - 1TeV
-               self.tau21_cut_max = 1
-               self.tau21_cut_min =0.98
+               self.tau21_cut_max = 0.35
+               self.tau21_cut_min =0.
         if self.wtagger_category == "LP":
            if options.width == 1: #high mass signal >1.0TeV
-               self.tau21_cut_max = 0.98
-               self.tau21_cut_min =0.25
+               self.tau21_cut_max = 0.75
+               self.tau21_cut_min =0.55
            else:#for 600GeV - 1TeV
-               self.tau21_cut_max = 0.98
-               self.tau21_cut_min =0.25
+               self.tau21_cut_max = 0.75
+               self.tau21_cut_min =0.35
         print "self.tau21_cut_min = %s,    self.tau21_cut_max = %s"%(self.tau21_cut_min, self.tau21_cut_max)
 
         #medium wtagger_eff reweight between data and mc #Wtagger_forV SF have be add to ntuple weight
         if   self.wtagger_category == "LP":
-            if self.tau21_cut_min == 0.25:
+            if self.tau21_cut_min == 0.55:
                 self.rrv_wtagger_eff_reweight_forT = RooRealVar("rrv_wtagger_eff_reweight_forT", "rrv_wtagger_eff_reweight_forT", 1.01)
                 self.rrv_wtagger_eff_reweight_forT.setError(0.015)
                 self.rrv_wtagger_eff_reweight_forV = RooRealVar("rrv_wtagger_eff_reweight_forV", "rrv_wtagger_eff_reweight_forV", 1.018)
                 self.rrv_wtagger_eff_reweight_forV.setError(0.03)
                 self.rrv_wtagger_eff_pT_extrapolation = 0.054*TMath.Log(self.signal_mass/400.)
-            elif self.tau21_cut_min == 0.35:#no use
+            elif self.tau21_cut_min == 0.35:
                 self.rrv_wtagger_eff_reweight_forT = RooRealVar("rrv_wtagger_eff_reweight_forT", "rrv_wtagger_eff_reweight_forT", 0.924)
                 self.rrv_wtagger_eff_reweight_forT.setError(0.011)
                 self.rrv_wtagger_eff_reweight_forV = RooRealVar("rrv_wtagger_eff_reweight_forV", "rrv_wtagger_eff_reweight_forV", 1.03)
@@ -281,13 +281,13 @@ class DoFit:
 
         elif self.wtagger_category == "HP":
 
-            if self.tau21_cut_max == 1.0:
+            if self.tau21_cut_max == 0.55:
                 self.rrv_wtagger_eff_reweight_forT = RooRealVar("rrv_wtagger_eff_reweight_forT", "rrv_wtagger_eff_reweight_forT", 0.899)
                 self.rrv_wtagger_eff_reweight_forT.setError(0.015)
                 self.rrv_wtagger_eff_reweight_forV = RooRealVar("rrv_wtagger_eff_reweight_forV", "rrv_wtagger_eff_reweight_forV", 0.969)
                 self.rrv_wtagger_eff_reweight_forV.setError(0.06)
                 self.rrv_wtagger_eff_pT_extrapolation = 0.041*TMath.Log(self.signal_mass/400.)
-            elif self.tau21_cut_max == 0.35:#no use
+            elif self.tau21_cut_max == 0.35:
                 self.rrv_wtagger_eff_reweight_forT = RooRealVar("rrv_wtagger_eff_reweight_forT", "rrv_wtagger_eff_reweight_forT", 0.942)
                 self.rrv_wtagger_eff_reweight_forT.setError(0.011)
                 self.rrv_wtagger_eff_reweight_forV = RooRealVar("rrv_wtagger_eff_reweight_forV", "rrv_wtagger_eff_reweight_forV", 0.99)
@@ -311,21 +311,21 @@ class DoFit:
 
         #correct the W-jet mass peak difference between data and MC
         if not options.realdata == 1:
-            self.mean_shift = -0.635# 0.0 means no correction
-            self.sigma_scale = 1.026# 1.0 means no correction
+            self.mean_shift = 0.0# 
+            self.sigma_scale = 1.0# 1.0 means no correction
         else:
            if self.wtagger_category == "HP":           
-               if self.tau21_cut_max == 1.:
-                   self.mean_shift = -0.635#81.4-81.7
-                   self.sigma_scale = 1.026#9.41/8.93
-               elif self.tau21_cut_max == 0.35:#no use
+               if self.tau21_cut_max == 0.55:
+                   self.mean_shift = 81.4-81.7
+                   self.sigma_scale = 9.41/8.93
+               elif self.tau21_cut_max == 0.35:
                    self.mean_shift = 81.1-81.7
                    self.sigma_scale = 9.47/8.70
            elif self.wtagger_category == "LP":    
-               if self.tau21_cut_min == 0.25:
-                   self.mean_shift = -0.635#81.4-81.7
-                   self.sigma_scale = 1.026#9.41/8.93
-               elif self.tau21_cut_min == 0.35:#no use
+               if self.tau21_cut_min == 0.55:
+                   self.mean_shift = 81.4-81.7
+                   self.sigma_scale = 9.41/8.93
+               elif self.tau21_cut_min == 0.35:
                    self.mean_shift = 81.1-81.7
                    self.sigma_scale = 9.47/8.70
 
@@ -338,8 +338,8 @@ class DoFit:
         if self.channel == "el":
             self.controlplot_WJets_scale = 1.00
             self.controlplot_TTbar_scale = 0.84
-        self.controlplot_WJets_scale = 1.01
-        self.controlplot_TTbar_scale = 0.95
+        self.controlplot_WJets_scale = 1.00
+        self.controlplot_TTbar_scale = 1.0
 
         #result files: The event number, parameters and error write into a txt file. The dataset and pdfs write into a root file
         #W and Z mass window in the same datacard dictionary
@@ -2915,7 +2915,7 @@ class DoFit:
             if self.channel == "mu" or self.channel == "el":
                 ##if treeIn.CategoryID == self.categoryID and treeIn.m_lvj> rrv_mass_lvj.getMin() and treeIn.m_lvj<rrv_mass_lvj.getMax() and tmp_jet_mass>rrv_mass_j.getMin() and tmp_jet_mass<rrv_mass_j.getMax() :
                 ## temporary using tau21 cut to replace categoryID
-                if (TMath.Abs(treeIn.CategoryID)< 3 or TMath.Abs(treeIn.CategoryID)==4) and treeIn.jet_DNNW_puppi>self.tau21_cut_min and treeIn.jet_DNNW_puppi<=self.tau21_cut_max and treeIn.m_lvj> rrv_mass_lvj.getMin() and treeIn.m_lvj<rrv_mass_lvj.getMax() and tmp_jet_mass>rrv_mass_j.getMin() and tmp_jet_mass<rrv_mass_j.getMax() and treeIn.passFilter_HBHE>0 and treeIn.passFilter_GlobalHalo>0 and treeIn.passFilter_HBHEIso>0 and treeIn.passFilter_ECALDeadCell>0 and treeIn.passFilter_GoodVtx>0 and treeIn.passFilter_EEBadSc>0 and treeIn.passFilter_badMuon>0 and treeIn.passFilter_badChargedHadron>0:
+                if (TMath.Abs(treeIn.CategoryID)< 3 or TMath.Abs(treeIn.CategoryID)==4) and treeIn.jet_tau2tau1_puppi>self.tau21_cut_min and treeIn.jet_tau2tau1_puppi<=self.tau21_cut_max and treeIn.m_lvj> rrv_mass_lvj.getMin() and treeIn.m_lvj<rrv_mass_lvj.getMax() and tmp_jet_mass>rrv_mass_j.getMin() and tmp_jet_mass<rrv_mass_j.getMax() and treeIn.passFilter_HBHE>0 and treeIn.passFilter_GlobalHalo>0 and treeIn.passFilter_HBHEIso>0 and treeIn.passFilter_ECALDeadCell>0 and treeIn.passFilter_GoodVtx>0 and treeIn.passFilter_EEBadSc>0 and treeIn.passFilter_badMuon>0 and treeIn.passFilter_badChargedHadron>0:
                     self.isGoodEvent = 1
 
             if self.channel == "mu" and treeIn.MTVlep<0:
@@ -5468,7 +5468,7 @@ class DoFit:
         ### Build the dataset
         self.get_mj_and_mlvj_dataset(self.file_VV_mc, "_VV_xww", "jet_mass_puppi_corr")
         if self.wtagger_category == "HP":
-            self.fit_mj_single_MC(self.file_VV_mc, "_VV_xww", "CB")
+            self.fit_mj_single_MC(self.file_VV_mc, "_VV_xww", "2_2Gaus")
         else:
             self.fit_mj_single_MC(self.file_VV_mc, "_VV_xww", "ExpGaus")
 
@@ -5493,13 +5493,13 @@ class DoFit:
                 #self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "ExpGaus")
                 self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "2Gaus_Exp")###2Gaus_Exp
             else:
-                self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "CB")
+                self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "2Gaus_ErfExp")
         else:
             if self.wtagger_category == "LP" :
                 #self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "ExpGaus")
                 self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "2Gaus_Exp")###2Gaus_Exp
             else:
-                self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "CB")
+                self.fit_mj_single_MC(self.file_TTbar_mc, "_TTbar_xww", "2Gaus_ErfExp")
 
         if self.MODEL_4_mlvj == "ErfPowExp_v1" or self.MODEL_4_mlvj == "ErfPow2_v1" or self.MODEL_4_mlvj == "ErfExp_v1" :
             #self.fit_mlvj_model_single_MC(self.file_TTbar_mc, "_TTbar_xww", "_sb_lo", "ErfExp_v1", 0, 0, 1)
@@ -5522,7 +5522,7 @@ class DoFit:
         if self.wtagger_category == "LP":
             self.fit_mj_single_MC(self.file_STop_mc, "_STop_xww", "ExpGaus")
         else:
-            self.fit_mj_single_MC(self.file_STop_mc, "_STop_xww", "CB")
+            self.fit_mj_single_MC(self.file_STop_mc, "_STop_xww", "2Gaus_ErfExp")
 
         if self.MODEL_4_mlvj == "ErfPowExp_v1" or self.MODEL_4_mlvj == "ErfPow2_v1" or self.MODEL_4_mlvj == "ErfExp_v1":
             self.fit_mlvj_model_single_MC(self.file_STop_mc, "_STop_xww", "_sb_lo", "ErfExp_v1", 0, 0, 1)
