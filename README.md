@@ -24,7 +24,7 @@ scramv1 b
 
 ####For BulkGravWW####
 
-git clone
+git clone https://github.com/chengchen1993/limit.git 
 
 cd limit/DoFit
 
